@@ -46,6 +46,9 @@ def dump(fp, **kwargs):
 load = _sjson.load
 loads = _sjson.loads
 
+JSONDecoder = _sjson.JSONDecoder
+JSONEncoder = _json.JSONEncoder
+
 
 def is_optional_rule(rule):
     if getattr(rule, 'is_optional', None) is not None:

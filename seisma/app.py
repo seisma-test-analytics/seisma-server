@@ -2,10 +2,14 @@
 
 import flask
 
+from . import json
 from . import constants
 
 
 class WSGIApplication(flask.Flask):
+
+    json_decoder = json.JSONDecoder
+    json_encoder = json.JSONEncoder
 
     def __init__(self, *args, **kwargs):
         super(WSGIApplication, self).__init__(*args, **kwargs)
