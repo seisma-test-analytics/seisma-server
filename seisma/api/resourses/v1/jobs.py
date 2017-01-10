@@ -24,7 +24,6 @@ import flask
 from sqlalchemy import desc
 
 from ...result import make_result
-from ...utils import api_location
 from ...resource import ApiResource
 from ...utils import paginated_query
 from ....database import schema as db
@@ -77,14 +76,7 @@ def create_job(job_name):
     }
     job = db.Job.create(**data)
 
-    return make_result(
-        job,
-        location=api_location(
-            '/jobs/{}',
-            job_name,
-            version=VERSION,
-        ),
-    ), statuses.CREATED
+    return make_result(job), statuses.CREATED
 
 
 @resource.route('/jobs/<string:job_name>', methods=['GET'])

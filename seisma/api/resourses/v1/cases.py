@@ -48,7 +48,6 @@ from sqlalchemy import desc
 
 from ... import string
 from ...result import make_result
-from ...utils import api_location
 from ...resource import ApiResource
 from ...utils import paginated_query
 from ....database import schema as db
@@ -106,14 +105,7 @@ def add_case_to_job(job_name, case_name):
         }
         case = db.Case.create(**data)
 
-        return make_result(
-            case,
-            location=api_location(
-                '/jobs/{}/cases/{}',
-                job_name, case_name,
-                version=VERSION,
-            ),
-        ), statuses.CREATED
+        return make_result(case), statuses.CREATED
 
 
 @resource.route('/jobs/<string:job_name>/cases', methods=['GET'])
@@ -211,9 +203,7 @@ def get_case_result_by_id(job_name, case_name, result_id):
                 id=result_id,
                 case_id=case.id
             ).first()
-            return make_result(
-                case_result,
-            )
+            return make_result(case_result), statuses.OK
 
 
 @resource.route(
@@ -265,14 +255,7 @@ def add_case_to_build(job_name, build_name, case_name):
                 if metadata:
                     case_result.md = metadata
 
-                return make_result(
-                    case_result,
-                    location=api_location(
-                        '/jobs/{}/builds/{}/cases/{}',
-                        job_name, build_name, case_name,
-                        version=VERSION,
-                    ),
-                ), statuses.CREATED
+                return make_result(case_result), statuses.CREATED
 
 
 @resource.route('/jobs/<string:job_name>/builds/<string:build_name>/cases', methods=['GET'])

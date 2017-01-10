@@ -37,7 +37,6 @@ from sqlalchemy import desc
 
 from ... import string
 from ...result import make_result
-from ...utils import api_location
 from ...resource import ApiResource
 from ...utils import paginated_query
 from ....database import schema as db
@@ -183,14 +182,7 @@ def start_build(job_name, build_name):
         if metadata:
             build.md = metadata
 
-        return make_result(
-            build,
-            location=api_location(
-                '/jobs/{}/builds/{}',
-                job_name, build_name,
-                version=VERSION,
-            ),
-        ), statuses.CREATED
+        return make_result(build), statuses.CREATED
 
 
 @resource.route(
@@ -236,14 +228,7 @@ def stop_build(job_name, build_name):
             }
             build.update(**data)
 
-            return make_result(
-                build,
-                location=api_location(
-                    '/jobs/{}/builds/{}',
-                    job_name, build_name,
-                    version=VERSION,
-                ),
-            ), statuses.OK
+            return make_result(build), statuses.OK
 
 
 @resource.route('/jobs/<string:job_name>/builds/<string:build_name>', methods=['GET'])
