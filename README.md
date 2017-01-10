@@ -13,26 +13,18 @@ Requirements
 Install
 -------
 
-..
-
     pip3.5 install --egg seisma
 
 Use command "deploy" for creation env. See --help before.
-
-..
 
     seisma deploy
 
 Create schema for database
 
-..
-
     seisma db init && seisma db migrate && seisma db upgrade
 
 
 Migrate database schema to next version
-
-..
 
     seisma db migrate && seisma db upgrade
 
@@ -44,8 +36,6 @@ If you wish change default config you can use SEISMA_SETTINGS env from seisma.in
 deploy command execution.
 
 Should import all from default config and rewrite what you need.
-
-..
 
     from seisma.conf.default import *
 
