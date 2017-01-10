@@ -13,26 +13,26 @@ Requirements
 Install
 -------
 
-.. code-block::shell
+..
 
     pip3.5 install --egg seisma
 
 Use command "deploy" for creation env. See --help before.
 
-.. code-block::shell
+..
 
     seisma deploy
 
 Create schema for database
 
-.. code-block::shell
+..
 
     seisma db init && seisma db migrate && seisma db upgrade
 
 
 Migrate database schema to next version
 
-.. code-block::shell
+..
 
     seisma db migrate && seisma db upgrade
 
@@ -45,7 +45,7 @@ deploy command execution.
 
 Should import all from default config and rewrite what you need.
 
-.. code-block::python
+..
 
     from seisma.conf.default import *
 
