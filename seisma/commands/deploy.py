@@ -26,11 +26,19 @@ CMD_OPTIONS = (
     ),
     Option(
         '--port', '-p',
+        type=int,
         dest='port',
         default=constants.DEFAULT_PORT,
         help='port when listen nginx. default "{}"'.format(
             constants.DEFAULT_PORT,
         ),
+    ),
+    Option(
+        '--docs-port',
+        type=int,
+        dest='docs_port',
+        default=0,
+        help='port when listen nginx for documentation. default port + 1',
     ),
     Option(
         '--workers', '-w',
@@ -47,11 +55,18 @@ CMD_OPTIONS = (
             constants.DEFAULT_NGINX_CONFIG_FOLDER,
         ),
     ),
+    Option(
+        '--seisma-ui',
+        type=str,
+        dest='ui_path',
+        default=constants.FRONTEND_FOLDER,
+        help='Path to seisma ui application',
+    ),
 )
 
 
 env = Environment(
-    loader=FileSystemLoader(constants.DEPLOY_FOLDER),
+    loader=FileSystemLoader(constants.TEMPLATES_FOLDER),
 )
 
 
@@ -80,7 +95,6 @@ def create_nginx_config(nginx_config_folder, **options):
 
     options.update(
         docs_folder=constants.DOCS_FOLDER,
-        static_path=constants.FRONTEND_FOLDER,
     )
 
     with open(os.path.join(nginx_config_folder, constants.NGINX_CONFIG_FILE_NAME), 'w') as f:
@@ -88,11 +102,15 @@ def create_nginx_config(nginx_config_folder, **options):
         f.write(tpl.render(**options))
 
 
-def install(config, port, workers, nginx_config_folder):
+def install(config, port, docs_port, workers, nginx_config_folder, ui_path):
+    docs_port = docs_port if docs_port != 0 else port + 1
+
     create_initd_file()
     create_nginx_config(
         nginx_config_folder,
         port=port,
+        docs_port=docs_port,
+        static_path=ui_path,
     )
     create_uwsgi_config(
         config,

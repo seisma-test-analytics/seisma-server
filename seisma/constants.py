@@ -59,10 +59,10 @@ os.environ.setdefault(CONFIG_ENV_NAME, DEFAULT_CONFIG)
 API_AUTO_CREATION_PARAM = 'autocreation'
 
 
-DEPLOY_FOLDER = os.path.abspath(
+TEMPLATES_FOLDER = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
-        'deploy',
+        'templates',
     ),
 )
 
@@ -88,7 +88,7 @@ DEFAULT_NGINX_CONFIG_FOLDER = '/etc/nginx/conf.d'
 FRONTEND_FOLDER = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
-        'frontend',
+        '..', '..', 'seisma-ui'
     ),
 )
 

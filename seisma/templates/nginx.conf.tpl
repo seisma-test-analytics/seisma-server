@@ -12,10 +12,6 @@ server {
         root {{ static_path }};
     }
 
-    location /docs {
-        alias {{ docs_folder }};
-    }
-
     location /api/ {
         ssi on;
 
@@ -30,4 +26,16 @@ server {
         uwsgi_intercept_errors on;
         uwsgi_read_timeout 1800;
     }
+}
+
+server {
+    listen {{ docs_port }};
+    expires off;
+    sendfile off;
+
+    location / {
+        root {{ docs_folder }};
+        try_files $uri /index.html;
+    }
+
 }
