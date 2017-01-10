@@ -40,6 +40,14 @@ Should import all from default config and rewrite what you need.
     from seisma.conf.default import *
 
 
+Rotate data in database
+-----------------------
+
+You can rotate data for days. Use ROTATE_FOR_DAYS from config and rotate command. It's 365 days by default.
+
+    seisma rotate
+
+
 Links
 -----
 
