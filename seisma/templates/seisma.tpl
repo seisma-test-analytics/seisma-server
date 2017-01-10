@@ -80,6 +80,7 @@ case "$1" in
             stop
             ;;
     'restart')
+            stop
             echo "Sleeping..."; sleep 1 ;
             start
             ;;
