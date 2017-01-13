@@ -247,6 +247,7 @@ def add_case_to_build(job_name, build_name, case_name):
                     'status': json.get('status'),
                     'runtime': json.get('runtime'),
                     'reason': json.get('reason', ''),
+                    'dialect': json.get('dialect', '')
                 }
                 metadata = json.get('metadata')
 

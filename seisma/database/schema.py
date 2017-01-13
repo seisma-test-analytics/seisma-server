@@ -163,6 +163,7 @@ class CaseResult(alchemy.Model, ModelMixin):
     reason = alchemy.Column(alchemy.Text(), nullable=False, default='')
     runtime = alchemy.Column(alchemy.Float(), nullable=False)
     status = alchemy.Column(alchemy.Enum(*CASE_STATUSES_CHOICE), nullable=False)
+    dialect = alchemy.Column(alchemy.String(50), nullable=False, default='')
 
     md = MetadataProperty(CaseResultMetadata, fk='case_result_id')
 
@@ -172,6 +173,7 @@ class CaseResult(alchemy.Model, ModelMixin):
         ObjectConverter.FromAttribute('reason'),
         ObjectConverter.FromAttribute('status'),
         ObjectConverter.FromAttribute('runtime'),
+        ObjectConverter.FromAttribute('dialect'),
         ObjectConverter.FromAttribute('case', is_optional=True),
         ObjectConverter.FromAttribute('build', is_optional=True),
         ObjectConverter.FromAttribute('md', alias='metadata', is_optional=True),
