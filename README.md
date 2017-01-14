@@ -13,20 +13,18 @@ Requirements
 Install
 -------
 
-    pip3.5 install --egg seisma
-
 Use command "deploy" for creation env. See --help before.
 
-    seisma deploy
+    python3.5 -m seisma deploy
 
 Create schema for database
 
-    seisma db init && seisma db migrate && seisma db upgrade
+    python3.5 -m seisma db init && seisma db migrate && seisma db upgrade
 
 
 Migrate database schema to next version
 
-    seisma db migrate && seisma db upgrade
+    python3.5 -m seisma db migrate && seisma db upgrade
 
 
 Checkout config
@@ -45,7 +43,7 @@ Rotate data in database
 
 You can rotate data for days. Use ROTATE_FOR_DAYS from config and rotate command. It's 365 days by default.
 
-    seisma rotate
+    python3.5 -m seisma rotate
 
 
 Links
