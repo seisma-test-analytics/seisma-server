@@ -1,5 +1,5 @@
-Test analytic server with open rest API
-=======================================
+Test analytic server with opened rest API
+=========================================
 
 Requirements
 ------------
