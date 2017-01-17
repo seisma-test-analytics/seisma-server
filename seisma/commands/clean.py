@@ -67,6 +67,12 @@ def _get_next_part_of_results(build):
     ).slice(0, MAX_OBJECTS_AT_ONCE).all()
 
 
+def _get_next_part_of_cases(job):
+    return db.Case.query.filter(
+        db.Case.job_id == job.id
+    ).slice(0, MAX_OBJECTS_AT_ONCE).all()
+
+
 def _delete_build(build):
     logger.info('Delete build with id={}'.format(build.id))
 
@@ -95,6 +101,15 @@ def _delete_result(result):
 
 def _delete_job(job):
     logger.info('Delete job with id={}'.format(job.id))
+
+    cases = _get_next_part_of_cases(job)
+
+    while len(cases) != 0:
+        for case in cases:
+            logger.info('Delete case with id={}'.format(case.id))
+            case.delete()
+
+        cases = _get_next_part_of_cases(job)
 
     job.delete()
 
