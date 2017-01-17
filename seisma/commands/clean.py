@@ -118,7 +118,7 @@ def clean(job_name):
 
             _delete_build(build)
 
-        builds = _get_next_part_of_builds()
+        builds = _get_next_part_of_builds(job_name)
 
     jobs = _get_next_part_of_jobs()
 
