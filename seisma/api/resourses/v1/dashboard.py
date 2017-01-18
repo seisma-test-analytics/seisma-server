@@ -69,6 +69,7 @@ def get_last_failed_builds():
     """
     query = db.Build.query.filter(
         db.Build.was_success == False,
+        db.Build.is_running == False,
         db.Build.date >= _get_date_from(),
     )
     query = query.order_by(desc(db.Build.date))
