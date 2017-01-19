@@ -39,7 +39,10 @@ class Job(alchemy.Model, ModelMixin):
 
     @property
     def total_builds(self):
-        return Build.query.filter(Build.job_id == self.id).count()
+        return Build.query.filter(
+            Build.job_id == self.id,
+            Build.is_running == False,
+        ).count()
 
     @property
     def total_cases(self):
