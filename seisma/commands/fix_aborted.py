@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import datetime
 
 from flask_script import Command
+
+
+logger = logging.getLogger(__name__)
 
 
 DEFAULT_BUILD_TIMEOUT = 60
@@ -24,6 +28,8 @@ def fix_aborted():
     )
 
     for build in builds:
+        logger.info('Fix build with id="{}"'.format(build.id))
+
         results_query = db.CaseResult.query.filter(
             db.CaseResult.build_id == build.id
         )
