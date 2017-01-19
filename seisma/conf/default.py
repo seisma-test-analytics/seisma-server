@@ -88,3 +88,7 @@ LOGGING_SETTINGS = {
 
 # clear results over days
 ROTATE_FOR_DAYS = 365
+
+# max time of build in minutes
+
+MAX_BUILD_TIMEOUT = 60

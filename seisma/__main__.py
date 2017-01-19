@@ -11,6 +11,7 @@ from seisma.database.alchemy import alchemy
 from seisma.commands.clean import CleanCommand
 from seisma.commands.rotate import RotateCommand
 from seisma.commands.deploy import AutoDeployCommand
+from seisma.commands.fix_aborted import FixAbortedBuilds
 from seisma.commands.fixtures import UploadFixturesToDatabase
 
 
@@ -22,6 +23,7 @@ manager.add_command('db', MigrateCommand)
 manager.add_command('clean', CleanCommand)
 manager.add_command('rotate', RotateCommand)
 manager.add_command('deploy', AutoDeployCommand)
+manager.add_command('fix_aborted', FixAbortedBuilds)
 manager.add_command('load_fixtures', UploadFixturesToDatabase)
 
 
