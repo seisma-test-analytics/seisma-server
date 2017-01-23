@@ -56,6 +56,11 @@ from ....constants import API_AUTO_CREATION_PARAM
 
 VERSION = 1
 
+SORT_DICT = {
+    'date': db.CaseResult.date,
+    'runtime': db.CaseResult.runtime,
+}
+
 
 resource = ApiResource(__name__, version=VERSION)
 
@@ -142,6 +147,7 @@ def get_stats_of_case_from_job(job_name, case_name):
     :query string date to: range to date (use with date_from only)
     :query int runtime_more: where runtime more than value
     :query int runtime_less: where runtime less than value
+    :query string sort_by: sort results by field
 
     :return: Case Result Resource List
     """
@@ -156,6 +162,9 @@ def get_stats_of_case_from_job(job_name, case_name):
             date_from = flask.request.args.get('date_from', None)
             runtime_more = flask.request.args.get('runtime_more', None)
             runtime_less = flask.request.args.get('runtime_less', None)
+            sort_by = flask.request.args.get('sort_by', 'date')
+
+            sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
 
             query = db.CaseResult.query.filter_by(case_id=case.id)
 
@@ -175,7 +184,7 @@ def get_stats_of_case_from_job(job_name, case_name):
             elif runtime_less is not None:
                 query = query.filter(db.CaseResult.runtime < string.to_float(runtime_less))
 
-            query = query.order_by(desc(db.CaseResult.date))
+            query = query.order_by(desc(sort_key))
             query = paginated_query(query, flask.request)
 
             return make_result(
@@ -269,6 +278,7 @@ def get_cases_from_build(job_name, build_name):
     :query string status: can be in (passed, skipped, failed, error)
     :query int runtime_more: where runtime more than value
     :query int runtime_less: where runtime less than value
+    :query string sort_by: sort results by field
 
     :return: Case Result Resource List
     """
@@ -281,6 +291,9 @@ def get_cases_from_build(job_name, build_name):
             status = flask.request.args.get('status', None)
             runtime_more = flask.request.args.get('runtime_more', None)
             runtime_less = flask.request.args.get('runtime_less', None)
+            sort_by = flask.request.args.get('sort_by', None)
+
+            sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
 
             query = db.CaseResult.query.filter_by(build_id=build.id)
 
@@ -292,6 +305,7 @@ def get_cases_from_build(job_name, build_name):
             elif runtime_less is not None:
                 query = query.filter(db.CaseResult.runtime < string.to_float(runtime_less))
 
+            query = query.order_by(desc(sort_key))
             query = paginated_query(query, flask.request)
 
             return make_result(
@@ -341,6 +355,7 @@ def get_cases_stats_from_job(job_name):
     :query string date to: range to date
     :query int runtime_more: where runtime more than value
     :query int runtime_less: where runtime less than value
+    :query string sort_by: sort results by field
 
     :return: Case Resource List
     """
@@ -352,6 +367,9 @@ def get_cases_stats_from_job(job_name):
         date_from = flask.request.args.get('date_from', None)
         runtime_more = flask.request.args.get('runtime_more', None)
         runtime_less = flask.request.args.get('runtime_less', None)
+        sort_by = flask.request.args.get('sort_by', 'date')
+
+        sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
 
         query = db.CaseResult.query.join(
             db.Build,
@@ -373,7 +391,7 @@ def get_cases_stats_from_job(job_name):
         elif runtime_less is not None:
             query = query.filter(db.CaseResult.runtime < string.to_float(runtime_less))
 
-        query = query.order_by(desc(db.CaseResult.date))
+        query = query.order_by(desc(sort_key))
         query = paginated_query(query, flask.request)
 
         return make_result(

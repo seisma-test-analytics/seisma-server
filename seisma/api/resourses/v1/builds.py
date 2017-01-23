@@ -45,6 +45,16 @@ from ....constants import API_AUTO_CREATION_PARAM
 
 VERSION = 1
 
+SORT_DICT = {
+    'date': db.Build.date,
+    'title': db.Build.title,
+    'runtime': db.Build.runtime,
+    'error_count': db.Build.error_count,
+    'fail_count': db.Build.fail_count,
+    'success_count': db.Build.success_count,
+    'tests_count': db.Build.tests_count,
+}
+
 
 resource = ApiResource(__name__, version=VERSION)
 
@@ -67,6 +77,7 @@ def get_builds_from_job(job_name):
     :query int success_count_more: where success count more than value
     :query int success_count_less: where success count less than value
     :query boolean was_success: was success after run build, yes or no
+    :query string sort_by: sort results by field
 
     :return: Build Resource List
     """
@@ -89,12 +100,15 @@ def get_builds_from_job(job_name):
         error_count_less = flask.request.args.get('error_count_less', None)
         success_count_more = flask.request.args.get('success_count_more', None)
         success_count_less = flask.request.args.get('success_count_less', None)
+        sort_by = flask.request.args.get('sort_by', None)
+
+        sort_key = SORT_DICT.get(sort_by, db.Build.date)
 
         if was_success is not None:
             filters['was_success'] = string.to_bool(was_success)
 
         query = db.Build.query.filter_by(**filters)
-        query = query.order_by(desc(db.Build.date))
+        query = query.order_by(desc(sort_key))
 
         if date_from is not None:
             date_from = string.to_datetime(date_from, no_time=True)
