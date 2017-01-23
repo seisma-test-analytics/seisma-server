@@ -59,7 +59,6 @@ VERSION = 1
 SORT_DICT = {
     'date': db.CaseResult.date,
     'runtime': db.CaseResult.runtime,
-    'name': db.Case.name,
 }
 
 
@@ -167,7 +166,7 @@ def get_stats_of_case_from_job(job_name, case_name):
 
             sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
 
-            query = db.CaseResult.query.filter_by(case_id=case.id).join(db.Case)
+            query = db.CaseResult.query.filter_by(case_id=case.id)
 
             if status in db.CASE_STATUSES_CHOICE:
                 query = query.filter(db.CaseResult.status == status)
@@ -296,7 +295,7 @@ def get_cases_from_build(job_name, build_name):
 
             sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
 
-            query = db.CaseResult.query.filter_by(build_id=build.id).join(db.Case)
+            query = db.CaseResult.query.filter_by(build_id=build.id)
 
             if status in db.CASE_STATUSES_CHOICE:
                 query = query.filter(db.CaseResult.status == status)
@@ -374,9 +373,7 @@ def get_cases_stats_from_job(job_name):
 
         query = db.CaseResult.query.join(
             db.Build,
-        ).filter(db.Build.job_id == job.id).join(
-            db.Case,
-        )
+        ).filter(db.Build.job_id == job.id)
 
         if date_from is not None:
             date_from = string.to_datetime(date_from, no_time=True)
