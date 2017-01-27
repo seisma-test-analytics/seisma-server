@@ -72,7 +72,9 @@ def setup(app):
         setup_uri(app, use_db_name=False)
         setup_settings(app)
 
-        alchemy = _SQLAlchemy(app)
+        alchemy = _SQLAlchemy(
+            app,
+        )
         session = alchemy.session
 
         create_database_if_not_exists(app.config)

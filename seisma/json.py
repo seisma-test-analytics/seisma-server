@@ -2,11 +2,13 @@
 
 from __future__ import absolute_import
 
+import types
 import datetime
 import json as _json
 from flask import request
 import simplejson as _sjson
 from sqlalchemy.engine.result import RowProxy
+from sqlalchemy.engine.result import ResultProxy
 
 from seisma.database.alchemy import ModelMixin
 
@@ -17,12 +19,15 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%M'
 JSON_MIME_TYPE = 'application/json'
 
 
-def json_serial(obj):
+def serializer(obj):
     if isinstance(obj, ModelMixin):
         return obj.to_dict()
 
     if isinstance(obj, RowProxy):
         return dict(obj)
+
+    if isinstance(obj, ResultProxy):
+        return [dict(d) for d in obj]
 
     if isinstance(obj, datetime.datetime):
         return obj.strftime(DATETIME_FORMAT)
@@ -30,17 +35,20 @@ def json_serial(obj):
     if isinstance(obj, datetime.date):
         return obj.strftime(DATE_FORMAT)
 
+    if type(obj) is types.FunctionType:
+        return obj()
+
     raise TypeError(
         'Unserializable object {} of class {}'.format(obj, obj.__class__),
     )
 
 
 def dumps(obj, **kwargs):
-    return _json.dumps(obj, default=json_serial, **kwargs)
+    return _json.dumps(obj, default=serializer, **kwargs)
 
 
 def dump(fp, **kwargs):
-    return _json.dump(fp, default=json_serial, **kwargs)
+    return _json.dump(fp, default=serializer, **kwargs)
 
 
 load = _sjson.load

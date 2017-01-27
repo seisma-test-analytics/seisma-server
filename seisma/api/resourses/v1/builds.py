@@ -45,7 +45,7 @@ from ....constants import API_AUTO_CREATION_PARAM
 
 VERSION = 1
 
-SORT_DICT = {
+FIELD_NAME_TO_FIELD_INSTANCE = {
     'date': db.Build.date,
     'title': db.Build.title,
     'runtime': db.Build.runtime,
@@ -102,7 +102,7 @@ def get_builds_from_job(job_name):
         success_count_less = flask.request.args.get('success_count_less', None)
         sort_by = flask.request.args.get('sort_by', None)
 
-        sort_key = SORT_DICT.get(sort_by, db.Build.date)
+        sort_key = FIELD_NAME_TO_FIELD_INSTANCE.get(sort_by, db.Build.date)
 
         if was_success is not None:
             filters['was_success'] = string.to_bool(was_success)

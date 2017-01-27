@@ -56,7 +56,7 @@ from ....constants import API_AUTO_CREATION_PARAM
 
 VERSION = 1
 
-SORT_DICT = {
+FIELD_NAME_TO_FIELD_INSTANCE = {
     'date': db.CaseResult.date,
     'runtime': db.CaseResult.runtime,
 }
@@ -164,7 +164,7 @@ def get_stats_of_case_from_job(job_name, case_name):
             runtime_less = flask.request.args.get('runtime_less', None)
             sort_by = flask.request.args.get('sort_by', 'date')
 
-            sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
+            sort_key = FIELD_NAME_TO_FIELD_INSTANCE.get(sort_by, db.CaseResult.date)
 
             query = db.CaseResult.query.filter_by(case_id=case.id)
 
@@ -293,7 +293,7 @@ def get_cases_from_build(job_name, build_name):
             runtime_less = flask.request.args.get('runtime_less', None)
             sort_by = flask.request.args.get('sort_by', None)
 
-            sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
+            sort_key = FIELD_NAME_TO_FIELD_INSTANCE.get(sort_by, db.CaseResult.date)
 
             query = db.CaseResult.query.filter_by(build_id=build.id)
 
@@ -369,7 +369,7 @@ def get_cases_stats_from_job(job_name):
         runtime_less = flask.request.args.get('runtime_less', None)
         sort_by = flask.request.args.get('sort_by', 'date')
 
-        sort_key = SORT_DICT.get(sort_by, db.CaseResult.date)
+        sort_key = FIELD_NAME_TO_FIELD_INSTANCE.get(sort_by, db.CaseResult.date)
 
         query = db.CaseResult.query.join(
             db.Build,
