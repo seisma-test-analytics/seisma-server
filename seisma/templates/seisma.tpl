@@ -12,6 +12,7 @@ PID_FILE="/var/run/seisma.pid"
 LOG_FILE="/var/log/seisma.log"
 SOCKET_FILE="/var/run/seisma.sock"
 CONFIG_FILE="/etc/seisma.ini"
+TOUCH_RELOAD_FILE="/var/run/seisma.touch.reload"
 
 
 function is_running() {
@@ -35,7 +36,6 @@ function status() {
     if [ $( is_running ) $? -eq $True ]; then
         echo
         echo "Seisma is running"
-
     else
         echo
         echo "Seisma is stopped"
@@ -51,7 +51,8 @@ function start() {
         exit 0
     else
         touch $PID_FILE
-        $UWSGI_BIN --ini "$CONFIG_FILE" --pidfile $PID_FILE --daemonize $LOG_FILE --socket $SOCKET_FILE
+        echo "`date -u`" > $TOUCH_RELOAD_FILE
+        $UWSGI_BIN --ini "$CONFIG_FILE" --pidfile $PID_FILE --daemonize $LOG_FILE --socket $SOCKET_FILE --touch-reload $TOUCH_RELOAD_FILE
     fi
 }
 
@@ -71,6 +72,12 @@ function stop() {
     fi
 }
 
+function reload() {
+    echo "==== Seisma reload ===="
+
+    echo "`date -u`" > $TOUCH_RELOAD_FILE
+}
+
 
 case "$1" in
     'start')
@@ -87,9 +94,12 @@ case "$1" in
     'status')
             status
             ;;
+    'reload')
+            reload
+            ;;
     *)
             echo
-            echo "Usage: $0 { start | stop | restart | status }"
+            echo "Usage: $0 { start | stop | restart | status | reload }"
             echo
             exit 1
             ;;
