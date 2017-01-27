@@ -24,9 +24,9 @@ def get_stat_about_fail_cases():
     Get stat about fail cases.
 
     :return: {
-        "case_name": "case name",
-        "job_name": "job name",
-        "fails": num of fails
+        "name": "case name",
+        "fails": num of fails,
+        "job": "{"name": job name", "title": "job title"}
     }
     """
     connection = get_connection()
