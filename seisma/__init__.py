@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from gevent.monkey import patch_all
+patch_all()
+
+del patch_all
+
 import sys
 
 
