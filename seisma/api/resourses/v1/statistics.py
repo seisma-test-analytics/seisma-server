@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 from http import HTTPStatus as statuses
 
 import flask
 
 from ...result import make_result
 from ...resource import ApiResource
+from ....database.utils import date_to_string
 from ....database.alchemy import get_connection
 from ...utils import get_limit_offset_from_request
+from ....database.utils import validate_date_string
 
 
 VERSION = 1
-
 
 resource = ApiResource(__name__, version=VERSION)
 
@@ -23,12 +25,24 @@ def get_stat_about_fail_cases():
 
     Get stat about fail cases.
 
+    :query string date_from: range from date
+
     :return: {
         "name": "case name",
         "fails": num of fails,
         "job": "{"name": job name", "title": "job title"}
     }
     """
+    default_delta_days = 3
+    date_from = flask.request.args.get('date_from', None)
+
+    if date_from is None:
+        date_from = date_to_string(
+            datetime.datetime.now() - datetime.timedelta(days=default_delta_days)
+        )
+    else:
+        validate_date_string(date_from)
+
     connection = get_connection()
     limit, offset = get_limit_offset_from_request(flask.request)
 
@@ -40,8 +54,12 @@ def get_stat_about_fail_cases():
     WHERE
         r.case_id=c.id
         AND
+        r.date >= {date_from}
+        AND
         r.status IN ("failed", "error")
-    """
+    """.format(
+        date_from=date_from,
+    )
 
     base_query = """
     SELECT
@@ -59,17 +77,17 @@ def get_stat_about_fail_cases():
         subquery=subquery,
     )
 
-    query = """
-    {query}
-    LIMIT {limit}
-    OFFSET {offset}
-    """.format(
-        limit=limit,
-        offset=offset,
-        query=base_query,
+    result = connection.execute(
+        """
+        {query}
+        LIMIT {limit}
+        OFFSET {offset}
+        """.format(
+            limit=limit,
+            offset=offset,
+            query=base_query,
+        )
     )
-
-    result = connection.execute(query)
     total_count = connection.execute(
         'SELECT count(*) FROM ({query}) records'.format(query=base_query)
     ).scalar()
