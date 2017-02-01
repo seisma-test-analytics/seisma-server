@@ -5,12 +5,12 @@ from http import HTTPStatus as statuses
 
 import flask
 
+from ... import string
 from ...result import make_result
 from ...resource import ApiResource
 from ....database.utils import date_to_string
 from ....database.alchemy import get_connection
 from ...utils import get_limit_offset_from_request
-from ....database.utils import validate_date_string
 
 
 VERSION = 1
@@ -25,7 +25,7 @@ def get_stat_about_fail_cases():
 
     Get stat about fail cases.
 
-    :query string date_from: range from date
+    :query integer for_days: get stat for days
 
     :return: {
         "name": "case name",
@@ -33,15 +33,14 @@ def get_stat_about_fail_cases():
         "job": "{"name": job name", "title": "job title"}
     }
     """
-    default_delta_days = 3
-    date_from = flask.request.args.get('date_from', None)
+    default_for_days = 3
+    for_days = string.to_int(
+        flask.request.args.get('for_days', default_for_days),
+    )
 
-    if date_from is None:
-        date_from = date_to_string(
-            datetime.datetime.now() - datetime.timedelta(days=default_delta_days)
-        )
-    else:
-        validate_date_string(date_from)
+    date_from = date_to_string(
+        datetime.datetime.now() - datetime.timedelta(days=for_days)
+    )
 
     connection = get_connection()
     limit, offset = get_limit_offset_from_request(flask.request)
