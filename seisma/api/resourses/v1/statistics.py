@@ -54,7 +54,7 @@ def get_stat_about_fail_cases():
     WHERE
         r.case_id=c.id
         AND
-        r.date >= {date_from}
+        r.date>="{date_from}"
         AND
         r.status IN ("failed", "error")
     """.format(
