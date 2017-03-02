@@ -263,3 +263,44 @@ def get_build_by_name(job_name, build_name):
 
         if build:
             return make_result(build), statuses.OK
+
+
+@resource.route('/builds', methods=['GET'])
+def get_builds_from_all_jobs():
+    """
+    .. http:get:: /builds
+
+    Get list of builds from all jobs.
+
+    :query int builds_limit: count of builds from each job
+
+    :return: {
+        Job name: Build Resource List
+    }
+    """
+    jobs = db.Job.query.filter_by(is_active=True)
+    jobs = jobs.order_by(desc(db.Job.created))
+
+    builds_limit = flask.request.args.get('builds_limit', None)
+
+    result = {}
+
+    for job in jobs:
+        filters = {
+            'job_id': job.id,
+            'is_running': False,
+        }
+
+        query = db.Build.query.filter_by(**filters)
+        query = query.order_by(desc(db.Build.date))
+        if builds_limit:
+            query = query.limit(string.to_int(builds_limit))
+
+        result.update(
+            {job.name: query.all()}
+        )
+
+    return make_result(
+        result,
+        total_count=len(result),
+    ), statuses.OK
