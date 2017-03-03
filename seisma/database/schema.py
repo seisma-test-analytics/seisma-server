@@ -2,19 +2,24 @@
 
 from datetime import date
 from datetime import datetime
+from datetime import timedelta
 
 from sqlalchemy import Index
 from sqlalchemy import UniqueConstraint
+from sqlalchemy import desc
 
 from .alchemy import alchemy
 from .alchemy import ModelMixin
 from ..json import ObjectConverter
 from .descriptors import MetadataProperty
+from ..database.utils import date_to_string
 
 
 CASE_BAD_STATUSES = ('failed', 'error')
 CASE_SUCCESS_STATUSES = ('passed', 'skipped')
 CASE_STATUSES_CHOICE = ('passed', 'skipped', 'failed', 'error')
+LAST_BUILDS_LIMIT = 50
+LAST_BUILDS_FOR_DAYS = 1
 
 
 class Job(alchemy.Model, ModelMixin):
@@ -35,6 +40,7 @@ class Job(alchemy.Model, ModelMixin):
         ObjectConverter.FromAttribute('description'),
         ObjectConverter.FromAttribute('total_cases', is_optional=True),
         ObjectConverter.FromAttribute('total_builds', is_optional=True),
+        ObjectConverter.FromAttribute('last_builds', is_optional=True),
     )
 
     @property
@@ -47,6 +53,19 @@ class Job(alchemy.Model, ModelMixin):
     @property
     def total_cases(self):
         return Case.query.filter(Case.job_id == self.id).count()
+
+    @property
+    def last_builds(self):
+        date_from = date_to_string(
+            datetime.now() - timedelta(days=LAST_BUILDS_FOR_DAYS)
+        )
+        return Build.query.filter(
+            Build.job_id == self.id,
+            Build.is_running == False,
+            Build.date >= date_from,
+        ).order_by(
+            desc(Build.date)
+        ).limit(LAST_BUILDS_LIMIT).all()
 
     @classmethod
     def get_by_name(cls, name):
