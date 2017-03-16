@@ -2,8 +2,8 @@
 
 import unittest
 
-from ... import json
 from ... import wsgi
+from ... import sjson as json
 
 
 class BaseApiTestCse(unittest.TestCase):

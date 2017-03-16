@@ -7,10 +7,10 @@ from functools import wraps
 import flask
 import jsonschema
 
-from .. import json
 from . import errors
 from . import response
 from .. import exceptions
+from .. import sjson as json
 
 
 logger = logging.getLogger(__name__)

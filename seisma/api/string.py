@@ -2,8 +2,8 @@
 
 import datetime
 
-from .. import json
 from .. import exceptions
+from .. import sjson as json
 
 
 def to_datetime(string, no_time=False, to_end_day=False):

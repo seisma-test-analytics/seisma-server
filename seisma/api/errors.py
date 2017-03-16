@@ -5,9 +5,9 @@ import logging
 import flask
 from sqlalchemy.exc import IntegrityError
 
-from .. import json
 from . import result
 from .. import exceptions
+from .. import sjson as json
 
 
 logger = logging.getLogger(__name__)

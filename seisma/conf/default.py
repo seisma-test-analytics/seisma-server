@@ -25,6 +25,17 @@ DATABASE = {
     'TRACK_MODIFICATIONS': False,
 }
 
+# Cache
+
+REDIS_CACHE = {
+    'HOST': '127.0.0.1',
+    'PORT': 6379,
+    'DB': 0,
+    'IS_DISABLED': False,
+    'MAX_CONNECTIONS': 15,
+    'GET_CONNECTION_TIMEOUT': 10,
+}
+
 # Logging settings
 
 LOGGING_SETTINGS = {

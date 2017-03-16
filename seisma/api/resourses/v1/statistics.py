@@ -19,6 +19,7 @@ resource = ApiResource(__name__, version=VERSION)
 
 
 @resource.route('/statistics/cases/fails', methods=['GET'])
+@flask.current_app.cached(timeout=60 * 15)
 def get_stat_about_fail_cases():
     """
     .. http:get:: /statistics/cases/fails

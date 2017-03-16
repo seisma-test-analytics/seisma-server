@@ -2,8 +2,8 @@
 
 import flask
 
-from . import json
 from . import constants
+from . import sjson as json
 
 
 class WSGIApplication(flask.Flask):
@@ -18,12 +18,18 @@ class WSGIApplication(flask.Flask):
 
         self.init_logging()
         self.init_alchemy()
+        self.init_cache()
 
-        self.init_blueprints()
+        with self.app_context():
+            self.init_blueprints()
 
     def init_alchemy(self):
         from seisma.database import alchemy
         alchemy.setup(self)
+
+    def init_cache(self):
+        from seisma.cache import Cache, RedisProvider
+        self.cache = Cache(self, provider_class=RedisProvider)
 
     def init_logging(self):
         logging_settings = self.config.get('LOGGING_SETTINGS')
@@ -33,9 +39,11 @@ class WSGIApplication(flask.Flask):
             dictConfig(logging_settings)
 
     def init_blueprints(self):
-        with self.app_context():
-            from seisma import api
-            from seisma import views
+        from seisma import api
+        from seisma import views
 
-            api.setup(self)
-            views.setup(self)
+        api.setup(self)
+        views.setup(self)
+
+    def cached(self, *args, **kwargs):
+        return self.cache.cached(*args, **kwargs)

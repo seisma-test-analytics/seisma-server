@@ -10,7 +10,7 @@ from sqlalchemy import desc
 
 from .alchemy import alchemy
 from .alchemy import ModelMixin
-from ..json import ObjectConverter
+from ..sjson import ObjectConverter
 from .descriptors import MetadataProperty
 from ..database.utils import date_to_string
 

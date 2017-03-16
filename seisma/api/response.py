@@ -5,7 +5,7 @@ from enum import Enum
 
 import flask
 
-from .. import json
+from .. import sjson as json
 
 
 logger = logging.getLogger(__name__)
@@ -39,8 +39,10 @@ def make_response(rv):
     else:
         status_code = DEFAULT_STATUS_CODE
 
+    rv = rv if isinstance(rv, str) else json.dumps(rv)
+
     return flask.Response(
-        json.dumps(rv),
+        rv,
         headers=headers,
         status=status_code,
         mimetype=json.JSON_MIME_TYPE,

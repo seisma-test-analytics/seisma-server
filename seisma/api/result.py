@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import types
+
 
 def make_result(data, **extra):
+    if type(data) is types.FunctionType:
+        data = data()
+
     return {
         'result': data,
         'extra': extra,

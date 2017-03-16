@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 
-import types
 import datetime
 import json as _json
 from flask import request
@@ -34,9 +33,6 @@ def serializer(obj):
 
     if isinstance(obj, datetime.date):
         return obj.strftime(DATE_FORMAT)
-
-    if type(obj) is types.FunctionType:
-        return obj()
 
     raise TypeError(
         'Unserializable object {} of class {}'.format(obj, obj.__class__),
