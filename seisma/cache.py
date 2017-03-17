@@ -5,6 +5,7 @@ from functools import wraps
 
 import flask
 import redis
+from gevent.queue import Queue
 
 from . import sjson as json
 
@@ -132,6 +133,7 @@ class RedisProvider(BaseProvider):
                 db=db,
                 host=host,
                 port=port,
+                queue_class=Queue,
                 timeout=get_connection_timeout,
                 max_connections=max_connections,
             ),
