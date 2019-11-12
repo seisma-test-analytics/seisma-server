@@ -1,0 +1,7 @@
+docker_builder:
+  only_if: $CIRRUS_TAG != ''
+  env:
+    DOCKER_USERNAME: ENCRYPTED[!bb414414987bee20579e70662b7fe3d40a337bcccc106bef962f0a905aa7b94987a5d3edc90091d10470eace89cce8bb!]
+    DOCKER_PASSWORD: ENCRYPTED[!c12444ddc26900d92bd8f652041cf8b91e88cb50b3e39d0dcf3b2d2a3e53b90633f1ed8ee0326d29c543c1fb61794ce8!]
+  build_script: make build
+  push_script: make publish

@@ -25,7 +25,6 @@ sys.path.insert(0, os.path.abspath('..'))
 
 extensions = [
     'alabaster',
-    'sphinx.ext.pngmath',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',

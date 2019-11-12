@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from warnings import warn
 
 
 TESTING_MODE = bool(os.getenv('SEISMA_TESTING', False))
@@ -58,48 +57,9 @@ os.environ.setdefault(CONFIG_ENV_NAME, DEFAULT_CONFIG)
 
 API_AUTO_CREATION_PARAM = 'autocreation'
 
-
-TEMPLATES_FOLDER = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        'templates',
-    ),
-)
-
-
-PROJECT_ROOT_PATH = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '..',
-    ),
-)
-
-
-DEFAULT_PORT = 8080
-
-NGINX_CONFIG_FILE_NAME = 'seisma.conf'
-
-INITD_FILE_PATH = '/etc/init.d/seisma'
-
-UWSGI_CONFIG_FILE_PATH = '/etc/seisma.ini'
-
-DEFAULT_NGINX_CONFIG_FOLDER = '/etc/nginx/conf.d'
-
-FRONTEND_FOLDER = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '..', '..', 'seisma-ui'
-    ),
-)
-
 DOCS_FOLDER = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
-        '..', 'docs', '_build', 'html',
+        '..', 'docs', '_build',
     ),
 )
-
-if not os.path.exists(DOCS_FOLDER):
-    warn('Docs folder "{}" does not exists'.format(DOCS_FOLDER), RuntimeWarning)
-
-INDEX_HTML_FILE = 'index.html'

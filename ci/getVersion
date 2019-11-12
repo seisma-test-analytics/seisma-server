@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [[ "$OSTYPE" == "darwin"*  ]]; then
+    SED=gsed
+else
+    SED=sed
+fi
+
+set -e
+
+if [ -n "${CIRRUS_TAG}" ]; then
+    VERSION=${CIRRUS_TAG}
+fi
+
+if [ -z "${VERSION}" ]; then
+    VERSION=$(git rev-parse --abbrev-ref HEAD)
+fi
+
+echo "${VERSION}" | ${SED} -r 's!^.*/!!g'

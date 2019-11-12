@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 
 
@@ -12,10 +13,10 @@ TESTING = False
 # Database settings
 
 DATABASE = {
-    'HOST': '127.0.0.1',
-    'PORT': 3306,
-    'USER': 'root',
-    'PASSWORD': '',
+    'HOST': os.getenv('DATABASE_HOST', 'mysql'),
+    'PORT': int(os.getenv('DATABASE_PORT', '3306')),
+    'USER': os.getenv('DATABASE_USER', 'root'),
+    'PASSWORD': os.getenv('DATABASE_PASSWORD', ''),
     'NAME': 'seisma',
     'POOL_SIZE': 10,
     'POOL_TIMEOUT': 10,
@@ -28,9 +29,9 @@ DATABASE = {
 # Cache
 
 REDIS_CACHE = {
-    'HOST': '127.0.0.1',
-    'PORT': 6379,
-    'DB': 0,
+    'HOST': os.getenv('REDIS_HOST', 'redis'),
+    'PORT': int(os.getenv('REDIS_PORT', '6379')),
+    'DB': int(os.getenv('REDIS_DATABASE', '0')),
     'IS_DISABLED': False,
     'MAX_CONNECTIONS': 15,
     'GET_CONNECTION_TIMEOUT': 10,
@@ -98,7 +99,7 @@ LOGGING_SETTINGS = {
 
 
 # clear results over days
-ROTATE_FOR_DAYS = 365
+ROTATE_FOR_DAYS = int(os.getenv('ROTATE_FOR_DAYS', '365'))
 
 # max time of build in minutes
-MAX_BUILD_TIMEOUT = 60
+MAX_BUILD_TIMEOUT = int(os.getenv('MAX_BUILD_TIMEOUT', '60'))
