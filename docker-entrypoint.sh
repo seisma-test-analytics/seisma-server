@@ -14,7 +14,7 @@ cat <<< "
 [uwsgi]
 no-orphans=1
 module=seisma.wsgi:app
-env=PYTHONPATH=/usr/local/src/seisma-server
+env=PYTHONPATH=/usr/local/src/seisma-api
 master=1
 processes=${PROCESSES}
 gevent=${GREENLETS}
@@ -42,7 +42,7 @@ done
 
 echo "Build docs"
 
-sphinx-build -b html /usr/local/src/seisma-server/docs /usr/local/src/seisma-server/docs/_build
+sphinx-build -b html /usr/local/src/seisma-api/docs /usr/local/src/seisma-api/docs/_build
 
 echo "Try to create or update database..."
 
