@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": [
+    "address",
+    "type"
+  ],
+  "properties": {
+    "address": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "pattern": "^slack$"
+    },
+    "options": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

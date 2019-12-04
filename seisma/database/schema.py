@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
+import json
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+import base64
 
-from sqlalchemy import Index
+from sqlalchemy import Index, VARCHAR, TypeDecorator, Text
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import desc
 
@@ -18,6 +19,7 @@ from ..database.utils import date_to_string
 CASE_BAD_STATUSES = ('failed', 'error')
 CASE_SUCCESS_STATUSES = ('passed', 'skipped')
 CASE_STATUSES_CHOICE = ('passed', 'skipped', 'failed', 'error')
+NOTIFICATION_TYPE = ('slack', )
 LAST_BUILDS_LIMIT = 50
 LAST_BUILDS_FOR_DAYS = 1
 
@@ -158,6 +160,47 @@ class Build(alchemy.Model, ModelMixin):
     @property
     def job(self):
         return Job.query.filter_by(id=self.job_id).first()
+
+
+class Notification(alchemy.Model, ModelMixin):
+
+    __tablename__ = 'notification'
+
+    __table_args__ = (
+        UniqueConstraint(
+            'job_id',
+            'type',
+            'address'
+        ),
+    )
+
+    id = alchemy.Column(alchemy.Integer, autoincrement=True, primary_key=True)
+    job_id = alchemy.Column(alchemy.Integer, alchemy.ForeignKey('job.id'), nullable=False)
+    address = alchemy.Column(alchemy.String(255), nullable=False)
+    type = alchemy.Column(alchemy.Enum(*NOTIFICATION_TYPE), nullable=False)
+    options = alchemy.Column(Text(), nullable=False, default="{}")
+
+    to_dict = ObjectConverter(
+        ObjectConverter.FromAttribute('id'),
+        ObjectConverter.FromAttribute('address'),
+        ObjectConverter.FromAttribute('type'),
+        ObjectConverter.FromAttribute('options'),
+    )
+    to_update = ObjectConverter(
+        ObjectConverter.FromAttribute('address'),
+        ObjectConverter.FromAttribute('type'),
+        ObjectConverter.FromAttribute('options'),
+    )
+
+
+    @property
+    def job(self):
+        return Job.query.filter_by(id=self.job_id).first()
+
+    @classmethod
+    def get_by_id(cls, id_):
+        return cls.query.filter_by(id=id_).first()
+
 
 
 class CaseResultMetadata(alchemy.Model, ModelMixin):
