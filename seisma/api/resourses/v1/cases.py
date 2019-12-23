@@ -113,6 +113,35 @@ def add_case_to_job(job_name, case_name):
         return make_result(case), statuses.CREATED
 
 
+@resource.route(
+    '/jobs/<string:job_name>/cases/<string:case_name>',
+    methods=['PUT'],
+    schema='case.put.json',
+)
+def update_case_in_job(job_name, case_name):
+    """
+    .. http:put:: /jobs/(string:job_name)/cases/(string:case_name)
+
+    Update case in job, statistic about case stored separated of case data.
+
+    :jsonparam string description: about case. it's can be docstring for example
+
+    :return: Case Resource
+    """
+    job = db.Job.get_by_name(job_name)
+
+    if job:
+        case = db.Case.query.filter_by(job_id=job.id, name=case_name).first()
+
+        if case:
+
+            json = flask.request.get_json()
+
+            case = case.update(**json)
+
+            return make_result(case), statuses.OK
+
+
 @resource.route('/jobs/<string:job_name>/cases', methods=['GET'])
 def get_cases_from_job(job_name):
     """
