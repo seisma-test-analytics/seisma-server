@@ -4,5 +4,5 @@
         "title": {"type": "string"},
         "description": {"type": "string"}
     },
-    "require": ["title"]
+    "required": ["title"]
 }
