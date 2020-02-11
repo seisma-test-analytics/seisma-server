@@ -10,11 +10,9 @@ simplejson==3.8.2
 
 redis==2.10.5
 
-gevent==1.1.2
-greenlet==0.4.10
 uWSGI==2.0.18
 
-https://github.com/mysql/mysql-connector-python/archive/2.2.0.tar.gz
+mysql-connector-python==8.0.19
 
 # Docs
 sphinx
