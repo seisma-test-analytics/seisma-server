@@ -23,7 +23,6 @@ Container environments
 ----------------------
 
 * **PROCESSES** - number of processes
-* **GREENLETS** - number of greenlets inside process
 * **DATABASE_HOST** - mysql database host
 * **DATABASE_PORT** - mysql database port
 * **DATABASE_USER** - mysql database user
